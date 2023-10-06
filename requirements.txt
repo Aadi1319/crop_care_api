@@ -57,7 +57,7 @@ tensorboard-data-server==0.6.0
 tensorflow==2.2.0
 tensorflow-estimator==2.2.0
 tensorflow-hub==0.8.0
-tensorflow-intel==2.1.0
+tensorflow-intel==0.0.1
 tensorflow-io-gcs-filesystem==0.17.0
 termcolor==1.1.0
 typing-extensions==3.7.4.3
