@@ -6,12 +6,24 @@ from fastapi import FastAPI, File, UploadFile
 from PIL import Image
 import io
 import numpy as np
+from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
 
 app = FastAPI()
 
 # Load the TensorFlow Hub model from the specified URL
 model_url = "https://tfhub.dev/agripredict/disease-classification/1"
 model = hub.load(model_url)
+
+# Configure CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Replace with your allowed origins or ["https://yourdomain.com"]
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
+    allow_headers=["*"],  # Allow all headers
+    allow_credentials=True,  # Set to True if you want to allow sending cookies with requests
+    expose_headers=["Content-Disposition"],  # Specify additional response headers to expose (optional)
+    max_age=600,  # Set the maximum age (in seconds) for preflight requests (optional)
+)
 
 @app.get('/')
 def fun():
