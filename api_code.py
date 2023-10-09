@@ -29,6 +29,10 @@ app.add_middleware(
 def fun():
     return {"hello": "welcome"}
 
+@app.get("/uploadfile/")
+async def e_File():
+    return{"error":"you are at wrong page"}
+    
 @app.post("/uploadfile/")
 async def upload_file(file: UploadFile):
     try:
