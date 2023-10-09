@@ -27,7 +27,7 @@ app.add_middleware(
 
 @app.get('/')
 def fun():
-    return {"hello": "welcome"}
+    return {"hello": "welcome ! Crop Care"}
 
 @app.get("/uploadfile/")
 async def e_File():
