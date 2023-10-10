@@ -1,12 +1,11 @@
 import os
-import requests
-import tensorflow_hub as hub
-import tensorflow as tf
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
 import numpy as np
-from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
+import tensorflow_hub as hub
+import tensorflow as tf
 
 app = FastAPI()
 
@@ -17,22 +16,14 @@ model = hub.load(model_url)
 # Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace with your allowed origins or ["https://yourdomain.com"]
-    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, etc.)
-    allow_headers=["*"],  # Allow all headers
-    allow_credentials=True,  # Set to True if you want to allow sending cookies with requests
-    expose_headers=["Content-Disposition"],  # Specify additional response headers to expose (optional)
-    max_age=600,  # Set the maximum age (in seconds) for preflight requests (optional)
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+    allow_credentials=True,
+    expose_headers=["Content-Disposition"],
+    max_age=600,
 )
 
-@app.get('/')
-def fun():
-    return {"hello": "welcome ! Crop Care"}
-
-@app.get("/uploadfile/")
-async def e_File():
-    return{"error":"you are at wrong page"}
-    
 @app.post("/uploadfile/")
 async def upload_file(file: UploadFile):
     try:
