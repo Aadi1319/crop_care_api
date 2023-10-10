@@ -1,11 +1,12 @@
 import os
+import requests
+import tensorflow_hub as hub
+import tensorflow as tf
 from fastapi import FastAPI, File, UploadFile
-from fastapi.middleware.cors import CORSMiddleware
 from PIL import Image
 import io
 import numpy as np
-import tensorflow_hub as hub
-import tensorflow as tf
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
@@ -23,6 +24,14 @@ app.add_middleware(
     expose_headers=["Content-Disposition"],
     max_age=600,
 )
+
+@app.get('/')
+def fun():
+    return {"hello": "welcome ! Crop Care"}
+
+@app.get("/uploadfile/")
+async def e_File():
+    return {"error": "This endpoint expects a POST request with an image file."}
 
 @app.post("/uploadfile/")
 async def upload_file(file: UploadFile):
