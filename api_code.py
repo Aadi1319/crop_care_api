@@ -1,18 +1,15 @@
 import os
-import requests
 import tensorflow_hub as hub
 import tensorflow as tf
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Request
 from PIL import Image
 import io
 import numpy as np
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 app = FastAPI()
-
-# Load the TensorFlow Hub model from the specified URL
-model_url = "https://tfhub.dev/agripredict/disease-classification/1"
-model = hub.load(model_url)
 
 # Configure CORS middleware
 app.add_middleware(
@@ -25,16 +22,22 @@ app.add_middleware(
     max_age=600,
 )
 
+# Mount the "static" directory to serve static files (e.g., CSS, JavaScript)
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+# Load the TensorFlow Hub model from the specified URL
+model_url = "https://tfhub.dev/agripredict/disease-classification/1"
+model = hub.load(model_url)
+
+# Initialize Jinja2 templates
+templates = Jinja2Templates(directory="templates")
+
 @app.get('/')
-def fun():
-    return {"hello": "welcome ! Crop Care"}
+def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-@app.get("/uploadfile/")
-async def e_File():
-    return {"error": "This endpoint expects a POST request with an image file."}
-
-@app.post("/uploadfile/")
-async def upload_file(file: UploadFile):
+@app.post("/uploadfile/")  # Use @app.post decorator for handling POST requests
+async def upload_file(request: Request, file: UploadFile = File(...)):
     try:
         # Read the uploaded file
         contents = await file.read()
@@ -67,6 +70,10 @@ async def upload_file(file: UploadFile):
         predicted_class_name = class_labels[predicted_class]
 
         return {"Predicted class": predicted_class_name}
-
     except Exception as e:
         return {"Error": f"Error decoding or processing the image: {e}"}, 400
+
+# Run the FastAPI app
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
