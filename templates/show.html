@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Classification</title>
+</head>
+<body>
+    <h1>Image Classification</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" name="file" accept="image/*">
+        <button type="button" id="predict-button">Predict</button>
+    </form>
+    <div id="result"></div>
+    
+    <script>
+        // Function to send the image file to the FastAPI API
+        async function predictImage() {
+            const formData = new FormData();
+            const fileInput = document.querySelector('input[type="file"]');
+            formData.append('file', fileInput.files[0]);
+
+            const response = await fetch('/uploadfile/', {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+            document.getElementById('result').innerText = 'Predicted Class: ' + data['Predicted class'];
+        }
+
+        // Attach the predictImage function to the Predict button click event
+        const predictButton = document.getElementById('predict-button');
+        predictButton.addEventListener('click', predictImage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Classification</title>
+</head>
+<body>
+    <h1>Image Classification</h1>
+
+    <form action="/uploadfile/" method="post" enctype="multipart/form-data">
+        <input type="file" name="file">
+        <input type="submit" value="Upload Image">
+    </form>
+
+    {% if prediction %}
+    <h2>Predicted Class:</h2>
+    <p>{{ prediction }}</p>
+    {% endif %}
+
+    <script>
+        // JavaScript to reload the page after 5 seconds
+        setTimeout(function() {
+            location.reload();
+        }, 5000); // 5000 milliseconds (5 seconds)
+    </script>
+</body>
+</html>
