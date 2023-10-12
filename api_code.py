@@ -72,8 +72,3 @@ async def upload_file(request: Request, file: UploadFile = File(...)):
         return {"Predicted class": predicted_class_name}
     except Exception as e:
         return {"Error": f"Error decoding or processing the image: {e}"}, 400
-
-# Run the FastAPI app
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=10000)
